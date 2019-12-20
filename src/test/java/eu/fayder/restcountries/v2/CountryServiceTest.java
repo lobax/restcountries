@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import java.util.List;
 
+import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
+import edu.columbia.cs.psl.phosphor.runtime.Taint;
+
 public class CountryServiceTest {
 
     @Test
@@ -18,7 +21,10 @@ public class CountryServiceTest {
 
     @Test
     public void getByAlpha2() throws Exception {
-        Country country = CountryService.getInstance().getByAlpha("CO");
+        String alpha = "CO";
+        MultiTainter.taintedObject(alpha, new Taint("t_alpha"));
+        Country country = CountryService.getInstance().getByAlpha(alpha);
+        System.out.println(MultiTainter.getTaint(country));
         Assert.assertNotNull(country);
         Assert.assertEquals("CO", country.getAlpha2Code());
     }
@@ -33,6 +39,7 @@ public class CountryServiceTest {
     @Test
     public void getByCodeList() throws Exception {
         List<Country> countries = CountryService.getInstance().getByCodeList("CO;NOR;EE");
+        System.out.println("NR Countries " + countries.size());
         Assert.assertNotNull(countries);
         Assert.assertFalse(countries.isEmpty());
         Assert.assertEquals(3, countries.size());

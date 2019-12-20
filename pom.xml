@@ -24,6 +24,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <servlet.version>4.0.0</servlet.version>
         <junit.version>4.12</junit.version>
+        <phosphor.version>0.0.5-SNAPSHOT</phosphor.version>
     </properties>
 
     <dependencies>
@@ -87,6 +88,11 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>edu.columbia.cs.psl.phosphor</groupId>
+            <artifactId>Phosphor</artifactId>
+            <version>${phosphor.version}</version>
+        </dependency>
 
     </dependencies>
 
@@ -110,6 +116,27 @@
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.eclipse.jetty</groupId>
+                                    <artifactId>jetty-runner</artifactId>
+                                    <version>9.4.24.v20191120</version>
+                                    <destFileName>jetty-runner.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

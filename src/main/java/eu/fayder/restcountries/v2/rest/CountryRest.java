@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
+//import edu.columbia.cs.psl.phosphor.runtime.Taint;
+
 @Provider
 @Path("/v2")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -32,6 +35,7 @@ public class CountryRest {
 
     @GET
     public Object getCountries(@QueryParam("fields") String fields) {
+        //Taint t_fields = new Taint("fields");
         LOG.info("Getting all");
         List<Country> countries = CountryService.getInstance().getAll();
         return parsedCountries(countries, fields);

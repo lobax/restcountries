@@ -3,6 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 package eu.fayder.restcountries.v2.rest;
 
+import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
+import edu.columbia.cs.psl.phosphor.runtime.Taint;
 import eu.fayder.restcountries.v2.domain.Country;
 import eu.fayder.restcountries.v2.domain.Language;
 import eu.fayder.restcountries.rest.CountryServiceBase;
@@ -129,5 +131,6 @@ public class CountryService extends CountryServiceBase {
     @SuppressWarnings("unchecked")
     private void initialize() {
         countries = (List<Country>) super.loadJson("countriesV2.json", Country.class);
+        MultiTainter.taintedObject(countries, new Taint("t_countries"));
     }
 }
