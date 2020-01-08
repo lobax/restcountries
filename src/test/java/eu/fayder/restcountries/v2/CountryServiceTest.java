@@ -1,5 +1,6 @@
 package eu.fayder.restcountries.v2;
 
+import eu.fayder.restcountries.domain.ICountryRestSymbols;
 import eu.fayder.restcountries.v2.domain.*;
 import eu.fayder.restcountries.v2.rest.CountryService;
 import org.junit.Assert;
@@ -14,17 +15,19 @@ public class CountryServiceTest {
 
     @Test
     public void getAll() throws Exception {
+        String tag =  "getAll(): ";
         List<Country> countries = CountryService.getInstance().getAll();
+        System.out.println(tag + MultiTainter.getTaint(countries));
         Assert.assertFalse(countries.isEmpty());
-        System.out.println("TOTAL Countries " + countries.size());
     }
 
     @Test
     public void getByAlpha2() throws Exception {
+        String tag = "getByAlpha2(): ";
         String alpha = "CO";
-        MultiTainter.taintedObject(alpha, new Taint("t_alpha"));
+        MultiTainter.taintedObject(alpha, new Taint<>("t_alpha"));
         Country country = CountryService.getInstance().getByAlpha(alpha);
-        System.out.println(MultiTainter.getTaint(country));
+        System.out.println(tag + MultiTainter.getTaint(country));
         Assert.assertNotNull(country);
         Assert.assertEquals("CO", country.getAlpha2Code());
     }
@@ -38,8 +41,15 @@ public class CountryServiceTest {
 
     @Test
     public void getByCodeList() throws Exception {
-        List<Country> countries = CountryService.getInstance().getByCodeList("CO;NOR;EE");
-        System.out.println("NR Countries " + countries.size());
+        String tag = "getByCodeList(): ";
+        String[] codes = {"CO","NOR","EE"};
+        for (String code : codes) {
+            MultiTainter.taintedObject(code, new Taint<>("t_" + code));
+        }
+        List<Country> countries = CountryService.getInstance().getByCodeList(
+                String.join(ICountryRestSymbols.SEMICOLON, codes)
+        );
+        System.out.println(tag + MultiTainter.getTaint(countries));
         Assert.assertNotNull(countries);
         Assert.assertFalse(countries.isEmpty());
         Assert.assertEquals(3, countries.size());

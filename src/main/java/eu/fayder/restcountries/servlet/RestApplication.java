@@ -19,6 +19,13 @@ public class RestApplication extends Application {
     }
 
     @Override
+    public Set<Class<?>> getClasses() {
+        Set<Class<?>> resources = new HashSet<Class<?>>();
+        resources.add(eu.fayder.restcountries.v2.rest.CountryRest.class);
+        return resources;
+    }
+
+    @Override
     public Set<Object> getSingletons() {
         return singletons;
     }
